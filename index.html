@@ -96,7 +96,7 @@
       <thead><tr><th class="num">#</th><th>Owner</th><th class="num">2025</th><th>Dues</th><th class="num">Spot</th><th></th></tr></thead>
       <tbody id="owners"></tbody>
     </table>
-    <div id="note">This is the official selection order. Arrows are there if it changes &mdash; and if Berg / Dad Berg are swapped. Everything saves on this device.</div>
+    <div id="note">This is the official selection order. Arrows are there if it changes &mdash; and if Berg / Dad Berg are swapped. Updates Rod publishes show up for everyone on refresh.</div>
   </section>
 </div>
 
@@ -120,8 +120,15 @@
    "Dad Berg" = Jeff Barenberg - if that's backwards, the arrows fix it.
    2026 dues start unpaid. */
 const FEE = 150;
+/* PUBLISH FLOW: picks and paid marks come to Rod over chat; a session edits
+   `slots`/`paid` below, bumps `rev`, and pushes - Pages redeploys and every
+   visitor sees the new board. A rev bump discards visitors' stale local
+   state, so the published file always wins after an update. */
 const SEED = {
   v: 2,
+  rev: 1,
+  slots: {},   // pick number -> owner id, e.g. { "7": "tagan" }
+  paid: {},    // owner id -> true, e.g. { "cash": true }
   owners: [
     { id: "tagan",  name: "Tagan",    team: "Esch Mode",                    place: 10 },
     { id: "jason",  name: "Berg",     team: "IMAGONNAKILLU",                place: 13 },
@@ -145,10 +152,10 @@ const KEY = "amarillo-draft-2026";
 function freshState() {
   return {
     v: SEED.v,
-    // Selection order: known places worst-first, then the unknowns (alphabetical).
+    rev: SEED.rev,
     order: SEED.owners.map(o => o.id),
-    paid: {},   // id -> true
-    slots: {},  // slot number -> id
+    paid: { ...SEED.paid },
+    slots: { ...SEED.slots },
   };
 }
 
@@ -156,7 +163,8 @@ let state = load();
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) { const s = JSON.parse(raw); if (s.v === SEED.v) return s; }
+    // A published update (rev bump) beats whatever this device had saved.
+    if (raw) { const s = JSON.parse(raw); if (s.v === SEED.v && s.rev === SEED.rev) return s; }
   } catch (e) { /* corrupted state falls through to fresh */ }
   return freshState();
 }
