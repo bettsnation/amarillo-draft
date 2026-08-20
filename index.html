@@ -5,278 +5,254 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏈</text></svg>">
-<title>Draft Day — Amarillo · FantasyBetts</title>
+<title>Draft Day 2026 — Amarillo · FantasyBetts</title>
 <style>
   :root {
-    --bg: #0f172a; --panel: #1e293b; --line: #334155;
-    --text: #f8fafc; --dim: #94a3b8; --green: #22c55e; --brand: #228B22;
-    --amber: #f59e0b; --red: #ef4444;
+    --bg: #0b1120; --bg2: #0f172a; --panel: #16213a; --line: #263353;
+    --text: #f8fafc; --dim: #8fa3c2; --faint: #5b6b8c;
+    --green: #22c55e; --green-deep: #14532d; --gold: #eab308; --gold-dim: #a16207;
   }
   * { box-sizing: border-box; margin: 0; }
   body {
-    background: var(--bg); color: var(--text);
+    background:
+      radial-gradient(1200px 500px at 50% -100px, #1a2b4d 0%, transparent 70%),
+      repeating-linear-gradient(90deg, transparent 0 119px, rgba(255,255,255,.015) 119px 120px),
+      var(--bg);
+    color: var(--text);
     font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
-    padding: 16px; max-width: 1100px; margin: 0 auto;
+    padding: 0 16px 24px; min-height: 100vh;
   }
-  h1 { font-size: 1.5rem; }
-  h1 span { color: var(--brand); }
-  h2 { font-size: 1.05rem; margin-bottom: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: .05em; }
-  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; justify-content: space-between; margin-bottom: 18px; }
-  .grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
-  @media (min-width: 900px) { .grid { grid-template-columns: 5fr 4fr; } }
-  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .wrap { max-width: 1150px; margin: 0 auto; }
 
-  /* on the clock */
-  #clock { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px;
-           background: linear-gradient(90deg, #14532d, #1e293b); border: 1px solid var(--green); margin-bottom: 16px; }
-  #clock .who { font-size: 1.4rem; font-weight: 700; }
-  #clock .hint { color: var(--dim); font-size: .9rem; }
-  #clock.done { background: var(--panel); border-color: var(--line); }
+  /* ── marquee header ─────────────────────────────── */
+  .marquee { text-align: center; padding: 30px 0 22px; }
+  .marquee .brand {
+    font-size: .95rem; font-weight: 800; letter-spacing: .45em; text-indent: .45em;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .marquee h1 {
+    font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 900; letter-spacing: .02em;
+    text-transform: uppercase; line-height: 1.05; margin: 6px 0 4px;
+  }
+  .marquee h1 em { font-style: normal; color: var(--green); }
+  .marquee .where { color: var(--dim); font-weight: 600; letter-spacing: .25em; text-indent: .25em; text-transform: uppercase; font-size: .85rem; }
+  .rule { height: 3px; max-width: 420px; margin: 16px auto 0;
+          background: linear-gradient(90deg, transparent, var(--gold), transparent); border-radius: 2px; }
 
-  /* board */
-  .board { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
-  .slot { border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; min-height: 62px; cursor: pointer; }
-  .slot .n { color: var(--dim); font-size: .8rem; }
-  .slot .name { font-weight: 700; }
-  .slot .team { color: var(--dim); font-size: .75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .slot.taken { border-style: solid; border-color: var(--green); background: #16321f; }
-  .slot:not(.taken):hover { border-color: var(--green); }
+  /* ── pot banner ─────────────────────────────────── */
+  .pot {
+    display: flex; justify-content: center; gap: 10px; align-items: center; flex-wrap: wrap;
+    margin: 14px auto 26px; color: var(--dim); font-weight: 600;
+  }
+  .pot .chip {
+    background: linear-gradient(180deg, #1d2b17, #16240f); border: 1px solid var(--green-deep);
+    color: var(--green); border-radius: 99px; padding: 5px 16px; font-weight: 800; letter-spacing: .04em;
+  }
 
-  /* tables */
-  table { width: 100%; border-collapse: collapse; font-size: .95rem; }
-  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); }
-  th { color: var(--dim); font-weight: 600; font-size: .8rem; text-transform: uppercase; }
-  td.num, th.num { text-align: center; }
-  .pill { display: inline-block; border-radius: 99px; padding: 1px 10px; font-size: .8rem; font-weight: 700; cursor: pointer; user-select: none; }
-  .pill.paid { background: #14532d; color: var(--green); }
-  .pill.unpaid { background: #451a1a; color: var(--red); }
-  .order-btns button { background: none; border: 1px solid var(--line); color: var(--dim); border-radius: 6px;
-                       width: 26px; height: 24px; cursor: pointer; }
-  .order-btns button:hover { color: var(--text); border-color: var(--dim); }
-  .picked { color: var(--dim); }
+  /* ── on the clock ───────────────────────────────── */
+  .clock {
+    position: relative; overflow: hidden; text-align: center;
+    border: 1px solid var(--gold-dim); border-radius: 16px;
+    background: linear-gradient(120deg, #201a05 0%, #16213a 55%, #16213a 100%);
+    padding: 22px 18px 24px; margin-bottom: 10px;
+  }
+  .clock::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(500px 120px at 50% 0%, rgba(234,179,8,.14), transparent 70%);
+  }
+  .clock .tag {
+    display: inline-block; background: var(--gold); color: #1c1500; font-weight: 900;
+    font-size: .78rem; letter-spacing: .3em; text-indent: .3em; text-transform: uppercase;
+    border-radius: 4px; padding: 3px 12px; animation: pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: .55; } }
+  .clock .who { font-size: clamp(2.2rem, 7vw, 3.6rem); font-weight: 900; text-transform: uppercase; letter-spacing: .03em; margin-top: 8px; }
+  .clock .team { color: var(--dim); font-size: 1rem; }
+  .clock .sub { color: var(--faint); font-size: .85rem; margin-top: 8px; }
+  .clock.done { border-color: var(--green-deep); background: linear-gradient(120deg, #0f2417, #16213a 60%); }
+  .clock.done .tag { background: var(--green); animation: none; }
 
-  .stats { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 16px; }
-  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 18px; }
-  .stat .v { font-size: 1.4rem; font-weight: 700; }
-  .stat .l { color: var(--dim); font-size: .8rem; }
+  .next-up { text-align: center; color: var(--faint); font-size: .85rem; margin: 10px 0 26px; letter-spacing: .02em; }
+  .next-up b { color: var(--dim); font-weight: 700; }
 
-  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
-  .toolbar button { background: var(--panel); color: var(--text); border: 1px solid var(--line);
-                    border-radius: 8px; padding: 8px 14px; cursor: pointer; font-size: .9rem; }
-  .toolbar button:hover { border-color: var(--dim); }
-  #note { color: var(--dim); font-size: .85rem; margin-top: 10px; }
-  footer { margin-top: 28px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--dim); font-size: .8rem;
-           display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-  footer a { color: var(--dim); }
+  /* ── layout ─────────────────────────────────────── */
+  .grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+  @media (min-width: 940px) { .grid { grid-template-columns: 3fr 2fr; align-items: start; } }
+  section h2 {
+    font-size: .8rem; letter-spacing: .3em; text-indent: .3em; text-transform: uppercase;
+    color: var(--faint); text-align: center; margin-bottom: 14px; font-weight: 800;
+  }
+
+  /* ── draft board cards ──────────────────────────── */
+  .board { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; }
+  .card {
+    position: relative; border-radius: 12px; padding: 12px 12px 10px; min-height: 92px;
+    background: linear-gradient(180deg, #182543, #131d36);
+    border: 1px solid var(--line);
+  }
+  .card .pick {
+    position: absolute; top: 8px; right: 10px; font-size: 1.9rem; font-weight: 900;
+    color: rgba(255,255,255,.08); line-height: 1;
+  }
+  .card .lbl { font-size: .68rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
+  .card .name { font-size: 1.15rem; font-weight: 900; text-transform: uppercase; margin-top: 14px; }
+  .card .team { color: var(--dim); font-size: .74rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .card.taken { border-color: #2c7a44; background: linear-gradient(180deg, #14311f, #0f2417); }
+  .card.taken .pick { color: rgba(34,197,94,.22); }
+  .card.taken .lbl { color: var(--green); }
+  .card.open .name { color: var(--faint); font-weight: 700; font-size: .95rem; margin-top: 20px; letter-spacing: .1em; }
+
+  /* ── order list ─────────────────────────────────── */
+  .order { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 0; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 8px 16px; border-bottom: 1px solid rgba(38,51,83,.55); }
+  .row:last-child { border-bottom: 0; }
+  .row .idx {
+    width: 30px; height: 30px; flex: none; border-radius: 50%; display: grid; place-items: center;
+    background: #1d2a4a; color: var(--dim); font-weight: 800; font-size: .85rem;
+  }
+  .row .nm { font-weight: 800; }
+  .row .tm { color: var(--faint); font-size: .74rem; }
+  .row .right { margin-left: auto; text-align: right; font-size: .78rem; font-weight: 800; letter-spacing: .06em; }
+  .row.current { background: linear-gradient(90deg, rgba(234,179,8,.10), transparent 70%); }
+  .row.current .idx { background: var(--gold); color: #1c1500; }
+  .row.current .right { color: var(--gold); }
+  .row.picked { opacity: .55; }
+  .row.picked .idx { background: var(--green-deep); color: var(--green); }
+  .row.picked .right { color: var(--green); }
+  .row .paid { color: var(--green); font-size: .68rem; font-weight: 700; letter-spacing: .08em; }
+
+  footer {
+    max-width: 1150px; margin: 34px auto 0; padding-top: 14px; border-top: 1px solid var(--line);
+    color: var(--faint); font-size: .78rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+  footer a { color: var(--faint); }
 </style>
 </head>
 <body>
-<header>
-  <h1><span>FantasyBetts</span> · Draft Day — Amarillo 2026</h1>
-  <div class="hint" style="color:var(--dim)">Tap a pill to toggle paid · tap an open slot to give it to whoever&rsquo;s on the clock</div>
-</header>
+<div class="wrap">
 
-<div class="stats">
-  <div class="stat"><div class="v" id="stat-paid">–</div><div class="l">paid up</div></div>
-  <div class="stat"><div class="v" id="stat-cash">–</div><div class="l">collected ($150 each)</div></div>
-  <div class="stat"><div class="v" id="stat-picked">–</div><div class="l">draft spots chosen</div></div>
-</div>
+  <header class="marquee">
+    <div class="brand">FantasyBetts</div>
+    <h1>Draft Day <em>2026</em></h1>
+    <div class="where">Amarillo, Texas · 14 Teams</div>
+    <div class="rule"></div>
+  </header>
 
-<div id="clock"></div>
+  <div class="pot" id="pot"></div>
 
-<div class="grid">
-  <section class="panel">
-    <h2>Draft board</h2>
-    <div class="board" id="board"></div>
-  </section>
+  <div class="clock" id="clock"></div>
+  <div class="next-up" id="next-up"></div>
 
-  <section class="panel">
-    <h2>Selection order &amp; dues</h2>
-    <table>
-      <thead><tr><th class="num">#</th><th>Owner</th><th class="num">2025</th><th>Dues</th><th class="num">Spot</th><th></th></tr></thead>
-      <tbody id="owners"></tbody>
-    </table>
-    <div id="note">This is the official selection order. Arrows are there if it changes &mdash; and if Berg / Dad Berg are swapped. Updates Rod publishes show up for everyone on refresh.</div>
-  </section>
-</div>
+  <div class="grid">
+    <section>
+      <h2>The Board</h2>
+      <div class="board" id="board"></div>
+    </section>
+    <section>
+      <h2>Selection Order</h2>
+      <div class="order" id="order"></div>
+    </section>
+  </div>
 
-<div class="toolbar">
-  <button id="copy">Copy summary for the group chat</button>
-  <button id="export">Export</button>
-  <button id="import">Import</button>
-  <button id="reset">Reset to seed</button>
 </div>
 
 <footer>
-  <span>FantasyBetts — league business only; nothing here is fantasy advice.</span>
+  <span>Positions are announced in the group chat and posted here by the commish.</span>
   <span>Fantasy data provided by <a href="https://football.fantasysports.yahoo.com/" target="_blank" rel="noopener noreferrer">Yahoo Fantasy</a></span>
 </footer>
 
 <script>
 "use strict";
-/* Selection order set by Rod, 2026-08-20 - this IS the official order, not a
-   guess from standings. Names are what the league calls people. 2025 final
-   place shown where the archive has it. ASSUMPTION: "Berg" = Jason Barenberg,
-   "Dad Berg" = Jeff Barenberg - if that's backwards, the arrows fix it.
-   2026 dues start unpaid. */
+// Old interactive version stored state here; clear the leftovers.
+try { localStorage.removeItem("amarillo-draft-2026"); } catch (e) {}
+/* READ-ONLY BOARD. Picks are announced to Rod in the group chat; a session
+   edits SEED.slots below, bumps rev, and pushes - Pages redeploys and everyone
+   sees the new board on refresh. No local state, no interaction.
+   Selection order is the official one Rod set 2026-08-20.
+   ("Berg" = Jason Barenberg, "Dad Berg" = Jeff Barenberg.) */
 const FEE = 150;
-/* PUBLISH FLOW: picks and paid marks come to Rod over chat; a session edits
-   `slots`/`paid` below, bumps `rev`, and pushes - Pages redeploys and every
-   visitor sees the new board. A rev bump discards visitors' stale local
-   state, so the published file always wins after an update. */
 const SEED = {
-  v: 2,
-  rev: 1,
-  slots: {},   // pick number -> owner id, e.g. { "7": "tagan" }
-  paid: {},    // owner id -> true, e.g. { "cash": true }
-  owners: [
-    { id: "tagan",  name: "Tagan",    team: "Esch Mode",                    place: 10 },
-    { id: "jason",  name: "Berg",     team: "IMAGONNAKILLU",                place: 13 },
-    { id: "rodney", name: "Rod",      team: "Dem Ballplayers",              place: 14 },
-    { id: "j",      name: "J",        team: "CeeDee Nutz! (j)",             place: 11 },
-    { id: "larry",  name: "Larry",    team: "Kicked out",                   place: 8  },
-    { id: "david",  name: "David",    team: "Team Hase",                    place: 12 },
-    { id: "cash",   name: "Cash",     team: "Whoop Ass",                    place: 9  },
-    { id: "chuck",  name: "Chuck",    team: "West Canaan Coyotes",          place: null },
-    { id: "kevin",  name: "Kevin",    team: "No Limit Soldiers",            place: null },
-    { id: "jeff",   name: "Dad Berg", team: "TxVikings's Team",             place: null },
-    { id: "antiwon",name: "Twon",     team: "The Underdogs",                place: null },
-    { id: "josiah", name: "Josiah",   team: "Stryker Brigade R3birth",      place: null },
-    { id: "ryan",   name: "Ryan",     team: "Jerry's Libtard Money Makers", place: null },
-    { id: "chad",   name: "Chad",     team: "Kiss My Blackshears",          place: null },
+  rev: 2,
+  slots: {
+    // pick number -> owner id, e.g. "7": "tagan"
+  },
+  owners: [ // in selection order
+    { id: "tagan",  name: "Tagan",    team: "Esch Mode" },
+    { id: "jason",  name: "Berg",     team: "IMAGONNAKILLU" },
+    { id: "rodney", name: "Rod",      team: "Dem Ballplayers" },
+    { id: "j",      name: "J",        team: "CeeDee Nutz! (j)" },
+    { id: "larry",  name: "Larry",    team: "Kicked out" },
+    { id: "david",  name: "David",    team: "Team Hase" },
+    { id: "terrance", name: "Terrance", team: "Ravens" },  // replaced Cash, 2026-08-20
+    { id: "chuck",  name: "Chuck",    team: "West Canaan Coyotes" },
+    { id: "kevin",  name: "Kevin",    team: "No Limit Soldiers" },
+    { id: "jeff",   name: "Dad Berg", team: "TxVikings's Team" },
+    { id: "antiwon",name: "Twon",     team: "The Underdogs" },
+    { id: "josiah", name: "Josiah",   team: "Stryker Brigade R3birth" },
+    { id: "ryan",   name: "Ryan",     team: "Jerry's Libtard Money Makers" },
+    { id: "chad",   name: "Chad",     team: "Kiss My Blackshears" },
   ],
 };
+
 const N = SEED.owners.length;
-const KEY = "amarillo-draft-2026";
-
-function freshState() {
-  return {
-    v: SEED.v,
-    rev: SEED.rev,
-    order: SEED.owners.map(o => o.id),
-    paid: { ...SEED.paid },
-    slots: { ...SEED.slots },
-  };
-}
-
-let state = load();
-function load() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    // A published update (rev bump) beats whatever this device had saved.
-    if (raw) { const s = JSON.parse(raw); if (s.v === SEED.v && s.rev === SEED.rev) return s; }
-  } catch (e) { /* corrupted state falls through to fresh */ }
-  return freshState();
-}
-function save() { localStorage.setItem(KEY, JSON.stringify(state)); render(); }
-
 const byId = Object.fromEntries(SEED.owners.map(o => [o.id, o]));
-const slotOf = id => Object.keys(state.slots).find(s => state.slots[s] === id);
-const onClock = () => state.order.find(id => !slotOf(id));
+const slotOf = id => Object.keys(SEED.slots).find(s => SEED.slots[s] === id);
+const esc = t => { const d = document.createElement("span"); d.textContent = t; return d.innerHTML; };
 
-function render() {
-  // stats
-  const paidCount = state.order.filter(id => state.paid[id]).length;
-  document.getElementById("stat-paid").textContent = paidCount + " / " + N;
-  document.getElementById("stat-cash").textContent = "$" + (paidCount * FEE);
-  document.getElementById("stat-picked").textContent = Object.keys(state.slots).length + " / " + N;
+// pot - everyone is paid up
+document.getElementById("pot").innerHTML =
+  '<span class="chip">💰 All 14 paid</span><span>$' + (N * FEE).toLocaleString() + " pot · $" + FEE + " a head</span>";
 
-  // on the clock
-  const clock = document.getElementById("clock");
-  const current = onClock();
-  if (current) {
-    clock.className = "";
-    clock.innerHTML = '<div><div class="hint">On the clock to pick a draft spot</div>' +
-      '<div class="who">' + esc(byId[current].name) + '</div>' +
-      '<div class="hint">' + esc(byId[current].team) + '</div></div>';
-  } else {
-    clock.className = "done";
-    clock.innerHTML = '<div class="who">Draft order is set 🏈</div>';
-  }
+// on the clock = first in order without a position
+const remaining = SEED.owners.filter(o => !slotOf(o.id));
+const clock = document.getElementById("clock");
+if (remaining.length) {
+  const cur = remaining[0];
+  clock.innerHTML =
+    '<div style="position:relative"><span class="tag">On the Clock</span>' +
+    '<div class="who">' + esc(cur.name) + "</div>" +
+    '<div class="team">' + esc(cur.team) + "</div>" +
+    '<div class="sub">choosing their draft position · announce it in the group chat</div></div>';
+} else {
+  clock.className = "clock done";
+  clock.innerHTML =
+    '<div style="position:relative"><span class="tag">Order Locked</span>' +
+    '<div class="who">See you in Amarillo 🏈</div>' +
+    '<div class="sub">the 2026 draft order is set</div></div>';
+}
+document.getElementById("next-up").innerHTML = remaining.length > 1
+  ? "Next up: <b>" + remaining.slice(1, 4).map(o => esc(o.name)).join("</b> · <b>") + "</b>"
+  : "";
 
-  // board
-  const board = document.getElementById("board");
-  board.innerHTML = "";
-  for (let s = 1; s <= N; s++) {
-    const id = state.slots[s];
-    const div = document.createElement("div");
-    div.className = "slot" + (id ? " taken" : "");
-    div.innerHTML = '<div class="n">Pick ' + s + "</div>" +
-      (id ? '<div class="name">' + esc(byId[id].name) + '</div><div class="team">' + esc(byId[id].team) + "</div>"
-          : '<div class="team">open</div>');
-    div.onclick = () => {
-      if (id) { // undo, with a guard - misclicks on a live board are worse than a confirm
-        if (confirm("Clear pick " + s + " (" + byId[id].name + ")?")) { delete state.slots[s]; save(); }
-      } else if (current) {
-        state.slots[s] = current; save();
-      }
-    };
-    board.appendChild(div);
-  }
-
-  // owners table, in selection order
-  const tbody = document.getElementById("owners");
-  tbody.innerHTML = "";
-  state.order.forEach((id, i) => {
-    const o = byId[id];
-    const picked = slotOf(id);
-    const tr = document.createElement("tr");
-    if (picked) tr.className = "picked";
-    tr.innerHTML =
-      '<td class="num">' + (i + 1) + "</td>" +
-      "<td><strong>" + esc(o.name) + "</strong><br><span style='color:var(--dim);font-size:.78rem'>" + esc(o.team) + "</span></td>" +
-      '<td class="num">' + (o.place ? ordinal(o.place) : "—") + "</td>" +
-      '<td><span class="pill ' + (state.paid[id] ? "paid" : "unpaid") + '">' + (state.paid[id] ? "PAID" : "$" + FEE) + "</span></td>" +
-      '<td class="num">' + (picked || "—") + "</td>" +
-      '<td class="order-btns"><button aria-label="up">↑</button><button aria-label="down">↓</button></td>';
-    tr.querySelector(".pill").onclick = () => { state.paid[id] = !state.paid[id]; save(); };
-    const [up, down] = tr.querySelectorAll("button");
-    up.onclick = () => move(i, -1);
-    down.onclick = () => move(i, 1);
-    tbody.appendChild(tr);
-  });
+// board
+const board = document.getElementById("board");
+for (let s = 1; s <= N; s++) {
+  const id = SEED.slots[s];
+  const div = document.createElement("div");
+  div.className = "card " + (id ? "taken" : "open");
+  div.innerHTML = '<div class="pick">' + s + "</div>" +
+    '<div class="lbl">Pick ' + s + "</div>" +
+    (id
+      ? '<div class="name">' + esc(byId[id].name) + '</div><div class="team">' + esc(byId[id].team) + "</div>"
+      : '<div class="name">Open</div>');
+  board.appendChild(div);
 }
 
-function move(i, d) {
-  const j = i + d;
-  if (j < 0 || j >= state.order.length) return;
-  [state.order[i], state.order[j]] = [state.order[j], state.order[i]];
-  save();
-}
-
-function ordinal(n) { const s = ["th","st","nd","rd"], v = n % 100; return n + (s[(v-20)%10] || s[v] || s[0]); }
-function esc(t) { const d = document.createElement("span"); d.textContent = t; return d.innerHTML; }
-
-// toolbar
-document.getElementById("copy").onclick = async () => {
-  const lines = ["🏈 Draft Day — Amarillo 2026", ""];
-  lines.push("Draft order:");
-  for (let s = 1; s <= N; s++) lines.push("  " + s + ". " + (state.slots[s] ? byId[state.slots[s]].name : "(open)"));
-  const unpaid = state.order.filter(id => !state.paid[id]).map(id => byId[id].name);
-  lines.push("", unpaid.length ? "Still owe $" + FEE + ": " + unpaid.join(", ") : "Everyone is paid up 💰");
-  await navigator.clipboard.writeText(lines.join("\n"));
-  const b = document.getElementById("copy"); const t = b.textContent;
-  b.textContent = "Copied ✓"; setTimeout(() => b.textContent = t, 1500);
-};
-document.getElementById("export").onclick = () => {
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: "application/json" }));
-  a.download = "amarillo-draft-state.json"; a.click();
-};
-document.getElementById("import").onclick = () => {
-  const inp = document.createElement("input"); inp.type = "file"; inp.accept = ".json";
-  inp.onchange = () => {
-    const r = new FileReader();
-    r.onload = () => { try { const s = JSON.parse(r.result); if (s.v === SEED.v) { state = s; save(); } else alert("That file is from a different version of this page."); } catch (e) { alert("Not a valid export."); } };
-    r.readAsText(inp.files[0]);
-  };
-  inp.click();
-};
-document.getElementById("reset").onclick = () => {
-  if (confirm("Wipe paid marks, the board and the order back to the seed?")) { state = freshState(); save(); }
-};
-
-render();
+// selection order
+const order = document.getElementById("order");
+let currentSeen = false;
+SEED.owners.forEach((o, i) => {
+  const picked = slotOf(o.id);
+  const isCurrent = !picked && !currentSeen;
+  if (isCurrent) currentSeen = true;
+  const row = document.createElement("div");
+  row.className = "row" + (picked ? " picked" : isCurrent ? " current" : "");
+  row.innerHTML =
+    '<div class="idx">' + (i + 1) + "</div>" +
+    '<div><div class="nm">' + esc(o.name) + '</div><div class="tm">' + esc(o.team) + "</div></div>" +
+    '<div class="right">' + (picked ? "PICK " + picked : isCurrent ? "ON THE CLOCK" : '<span class="paid">PAID ✓</span>') + "</div>";
+  order.appendChild(row);
+});
 </script>
 </body>
 </html>
