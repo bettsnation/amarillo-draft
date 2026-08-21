@@ -157,7 +157,7 @@
 </div>
 
 <footer>
-  <span>Positions are announced in the group chat and posted here by the commish.</span>
+  <span>Positions are announced in the group chat and posted here by the commish. <b style="color:var(--green)">● LIVE</b> — this page updates itself.</span>
   <span>Fantasy data provided by <a href="https://football.fantasysports.yahoo.com/" target="_blank" rel="noopener noreferrer">Yahoo Fantasy</a></span>
 </footer>
 
@@ -172,7 +172,7 @@ try { localStorage.removeItem("amarillo-draft-2026"); } catch (e) {}
    ("Berg" = Jason Barenberg, "Dad Berg" = Jeff Barenberg.) */
 const FEE = 150;
 const SEED = {
-  rev: 2,
+  rev: 3,
   slots: {
     // pick number -> owner id, e.g. "7": "tagan"
   },
@@ -252,6 +252,31 @@ SEED.owners.forEach((o, i) => {
     '<div><div class="nm">' + esc(o.name) + '</div><div class="tm">' + esc(o.team) + "</div></div>" +
     '<div class="right">' + (picked ? "PICK " + picked : isCurrent ? "ON THE CLOCK" : '<span class="paid">PAID ✓</span>') + "</div>";
   order.appendChild(row);
+});
+
+/* ── stay fresh ──────────────────────────────────────────────────────────
+   GitHub Pages caches this file for 10 minutes and won't let us change
+   that header. So the page checks its own source for a newer rev - with a
+   cache-bypassing fetch - on load, every 60s, and whenever the tab comes
+   back into view. A newer rev swaps the page via a cache-busting query, so
+   picks show up within seconds of being published, no hard refresh needed. */
+let swapping = false;
+async function checkForUpdate() {
+  if (swapping || !navigator.onLine) return;
+  try {
+    const res = await fetch(location.pathname, { cache: "no-store" });
+    if (!res.ok) return;
+    const m = (await res.text()).match(/rev:\s*(\d+)/);
+    if (m && Number(m[1]) > SEED.rev) {
+      swapping = true;
+      location.replace(location.pathname + "?v=" + m[1]);
+    }
+  } catch (e) { /* offline blip - try again next tick */ }
+}
+checkForUpdate();
+setInterval(checkForUpdate, 60000);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") checkForUpdate();
 });
 </script>
 </body>
