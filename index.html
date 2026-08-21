@@ -121,6 +121,26 @@
   .row.picked .right { color: var(--green); }
   .row .paid { color: var(--green); font-size: .68rem; font-weight: 700; letter-spacing: .08em; }
 
+  /* ── rivalries ──────────────────────────────────── */
+  .rivalries { margin-top: 26px; }
+  .riv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .riv {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px;
+    background: linear-gradient(180deg, #182543, #131d36); border: 1px solid var(--line);
+    border-radius: 12px; padding: 14px 12px;
+  }
+  .riv .side { text-align: center; min-width: 0; }
+  .riv .side .nm { font-weight: 900; text-transform: uppercase; font-size: 1rem; }
+  .riv .side .tm { color: var(--faint); font-size: .7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .riv .vs {
+    font-weight: 900; font-size: .8rem; color: var(--gold); letter-spacing: .1em;
+    border: 1px solid var(--gold-dim); border-radius: 99px; padding: 2px 10px;
+  }
+  .riv.tbd { border-style: dashed; }
+  .riv.tbd .nm { color: var(--faint); font-weight: 700; letter-spacing: .1em; }
+  .riv.tbd .vs { color: var(--faint); border-color: var(--line); }
+  .riv-note { text-align: center; color: var(--faint); font-size: .82rem; margin-top: 12px; }
+
   footer {
     max-width: 1150px; margin: 34px auto 0; padding-top: 14px; border-top: 1px solid var(--line);
     color: var(--faint); font-size: .78rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
@@ -154,6 +174,12 @@
     </section>
   </div>
 
+  <section class="rivalries">
+    <h2>Rivalry Pairings · Week 1 &amp; Week 14</h2>
+    <div class="riv-grid" id="rivalries"></div>
+    <div class="riv-note" id="riv-note"></div>
+  </section>
+
 </div>
 
 <footer>
@@ -172,10 +198,15 @@ try { localStorage.removeItem("amarillo-draft-2026"); } catch (e) {}
    ("Berg" = Jason Barenberg, "Dad Berg" = Jeff Barenberg.) */
 const FEE = 150;
 const SEED = {
-  rev: 5,
+  rev: 6,
   slots: {
     // pick number -> owner id, e.g. "7": "tagan"
   },
+  // Rivals meet home-and-home: week 1 and week 14, the regular-season
+  // bookends. Pairs are announced by Rod and published here like picks.
+  rivalries: [
+    // ["rodney", "tagan"],
+  ],
   owners: [ // in selection order
     { id: "tagan",  name: "Tagan",    team: "Esch Mode" },
     { id: "jason",  name: "Berg",     team: "IMAGONNAKILLU" },
@@ -278,6 +309,34 @@ setInterval(checkForUpdate, 60000);
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") checkForUpdate();
 });
+
+// rivalries
+{
+  const grid = document.getElementById("rivalries");
+  const paired = new Set(SEED.rivalries.flat());
+  SEED.rivalries.forEach(([a, b]) => {
+    const div = document.createElement("div");
+    div.className = "riv";
+    div.innerHTML =
+      '<div class="side"><div class="nm">' + esc(byId[a].name) + '</div><div class="tm">' + esc(byId[a].team) + "</div></div>" +
+      '<div class="vs">VS</div>' +
+      '<div class="side"><div class="nm">' + esc(byId[b].name) + '</div><div class="tm">' + esc(byId[b].team) + "</div></div>";
+    grid.appendChild(div);
+  });
+  for (let i = SEED.rivalries.length; i < N / 2; i++) {
+    const div = document.createElement("div");
+    div.className = "riv tbd";
+    div.innerHTML = '<div class="side"><div class="nm">TBA</div></div><div class="vs">VS</div><div class="side"><div class="nm">TBA</div></div>';
+    grid.appendChild(div);
+  }
+  const unpaired = SEED.owners.filter(o => !paired.has(o.id));
+  document.getElementById("riv-note").textContent =
+    paired.size === 0
+      ? "Rivalries will be announced - each pair plays each other in week 1 and week 14."
+      : unpaired.length
+        ? "Still to be paired: " + unpaired.map(o => o.name).join(", ")
+        : "All rivalries are set - see you in week 1.";
+}
 </script>
 </body>
 </html>
